@@ -18,6 +18,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test test.js",
+    "test:CI": "react-scripts test test.js --verbose -u",
+    "test:coverage": "react-scripts test test.js --runInBand --coverage --verbose -u",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
