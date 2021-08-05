@@ -64,6 +64,21 @@
   animation: spin 2s linear infinite;
 }
 
+.previous-searches {
+  overflow-x: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.search-key {
+  cursor: pointer;
+  padding: 10px 20px;
+  color: white;
+  margin: 5px;
+  background-color: brown;
+  border-radius: 10px;
+}
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);

@@ -41,6 +41,19 @@ export default class Homepage extends Component {
         const {search} = this.state;
         if(search !== prevSearch){
             debounce(() => {
+                let searchList = localStorage.getItem('searchKeys');
+                searchList = searchList? JSON.parse(searchList) : [];
+                if(searchList.length < 10) {
+                    if(!searchList.includes(search) && search) {
+                        searchList.push(search);
+                    }
+                } else {
+                    if(!searchList.includes(search) && search) {
+                        searchList.shift();
+                        searchList.push(search);
+                    }
+                }
+                localStorage.setItem('searchKeys', JSON.stringify(searchList));
                 this.setState({photoList: [], loading: true});
                 fetchPhotos({search, page: 1}).then(res => {
                     if(res){
@@ -73,7 +86,6 @@ export default class Homepage extends Component {
                         this.setState({photoList: tempPhotoList, pages: res.photos.pages, loading: false, page: res.photos.page});
                     }
                 });
-                console.log('homepage bottom reached');
                 document.removeEventListener('scroll', this.trackScrolling);
             }
             if(page !== pages) {
@@ -88,6 +100,8 @@ export default class Homepage extends Component {
 
     render() {
         const { photoList, pages, page, loading, search } = this.state;
+        let searchList = localStorage.getItem('searchKeys');
+        searchList = searchList? JSON.parse(searchList) : [];
         return <div className='homepage' id='homepage'>
             <div className='param-div'>
                 <input 
@@ -100,6 +114,9 @@ export default class Homepage extends Component {
                     onChange={this.handleChange}
                     value={search}
                 />
+                {searchList.length > 0 && <div className='previous-searches'>
+                    {searchList.map(key => <button className='search-key' key={key} onClick={() => this.setState({search: key, page: 1, pages: 0})}>{key}</button>)}
+                </div>}
             </div>
             {
                 search && !loading && pages > 0 && <div className='no-of-results'>
